@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Location Map</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: white;
+        }
+
+        #map {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    background-image: url('map3.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+
+        .legend {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .legend h2 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+
+        .legend ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .legend li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .legend span {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .safe {
+            background: green;
+        }
+
+        .danger {
+            background: red;
+        }
+
+        .your-location {
+            background: blue;
+        }
+
+        .controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            color: white;
+        }
+
+        .controls label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .controls input, .controls select {
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 5px;
+            border-radius: 3px;
+            border: none;
+        }
+
+        .controls button {
+            width: 100%;
+            padding: 7px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .controls button:hover {
+            background-color: #218838;
+        }
+
+        .marker-circle {
+            position: absolute;
+            border: 2px solid rgba(0, 0, 255, 0.5); /* Light blue border */
+            border-radius: 50%;
+            width: 100px; /* Adjust this to set the size of the border circle */
+            height: 100px; /* Adjust this to set the size of the border circle */
+            z-index: 0; /* Ensure it is behind the marker */
+        }
+        .marker-circle:hover {
+            position: fixed;
+            width: 150px; /* Adjust this to set the size of the border circle */
+            height: 150px; /* Adjust this to set the size of the border circle */
+            z-index: 0; /* Ensure it is behind the marker */
+        }
+
+        .zone-number {
+            position: absolute;
+            top: -25px;
+            left: -15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 12px;
+            z-index: 1; /* Ensure it appears on top of the circle */
+            display: none; /* Hide by default */
+        }
+
+        .marker-circle:hover .zone-number {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <div class="legend">
+        <h2>Legend</h2>
+        <ul>
+            <li><span class="safe"></span> Safety Zones</li>
+            <li><span class="danger"></span> Danger Zones</li>
+            <li><span class="your-location"></span> Your Location</li>
+        </ul>
+    </div>
+
+    <div class="controls">
+        <h2>Add Marker</h2>
+        <label for="type">Marker Type:</label>
+        <select id="type">
+            <option value="safe">Safety Zone</option>
+            <option value="danger">Danger Zone</option>
+            <option value="your-location">Your Location</option>
+        </select>
+        <label for="top">Top Position (%):</label>
+        <input type="number" id="top" min="0" max="100" placeholder="e.g., 50">
+        <label for="left">Left Position (%):</label>
+        <input type="number" id="left" min="0" max="100" placeholder="e.g., 50">
+        <button id="addMarker">Add Marker</button>
+    </div>
+    <script>
+        let zoneCounter = 0;
+        const map = document.getElementById('map');
+        const addMarkerButton = document.getElementById('addMarker');
+    
+        addMarkerButton.addEventListener('click', () => {
+            const type = document.getElementById('type').value;
+            const top = document.getElementById('top').value;
+            const left = document.getElementById('left').value;
+    
+            if (top && left) {
+                zoneCounter++;
+    
+                const markerCircle = document.createElement('div');
+                markerCircle.classList.add('marker-circle');
+                markerCircle.style.top = `${top}%`;
+                markerCircle.style.left = `${left}%`;
+                markerCircle.style.position = 'absolute';
+    
+                // Set the background color based on the marker type
+                if (type === 'safe') {
+                    markerCircle.style.backgroundColor = 'rgba(0, 255, 0, 0.2)'; // Light green
+                    markerCircle.style.borderColor = 'rgba(0, 255, 0, 0.5)';
+                } else if (type === 'danger') {
+                    markerCircle.style.backgroundColor = 'rgba(255, 0, 0, 0.2)'; // Light red
+                    markerCircle.style.borderColor = 'rgba(255, 0, 0, 0.5)';
+                }
+    
+                const zoneNumber = document.createElement('div');
+                zoneNumber.classList.add('zone-number');
+                zoneNumber.innerText = zoneCounter;
+    
+                markerCircle.appendChild(zoneNumber);
+                map.appendChild(markerCircle);
+            } else {
+                alert('Please enter valid top and left positions.');
+            }
+        });
+    </script>
+    
+  
+</body>
+</html>

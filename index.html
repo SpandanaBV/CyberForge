@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disaster Locator Login/Sign-Up</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Thunderstorm and Rain Effects -->
+  <div class="storm">
+    <div class="lightning" id="lightning1"></div>
+    <div class="lightning" id="lightning2"></div>
+    <div class="rain"></div>
+  </div>
+
+  <!-- Login/Sign-Up Container -->
+  <div class="login-container">
+    <div class="login-box">
+        <h1 style="color: rgb(238, 240, 241);">HavenzLoop</h1>
+      <div class="toggle-buttons">
+        <button id="loginToggle" class="toggle-button active">Log In</button>
+        <button id="signUpToggle" class="toggle-button">Sign Up</button>
+      </div>
+
+      <!-- Log In Form -->
+      <form id="loginForm" class="form active">
+        <h1>Log In</h1>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Enter your email" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="login-button">Login</button>
+        <div id="loginMessage" class="message"></div>
+        
+      </form>
+
+      <!-- Sign Up Form -->
+      <form id="signUpForm" class="form">
+        <h1>Sign Up</h1>
+        <div class="form-group">
+          <label for="newEmail">Email</label>
+          <input type="email" id="newEmail" placeholder="Enter your email" required>
+        </div>
+        <div class="form-group">
+          <label for="newPassword">Password</label>
+          <input type="password" id="newPassword" placeholder="Create a password" required>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+        </div>
+        <button type="submit" class="login-button">Sign Up</button>
+        <div id="signUpMessage" class="message"></div>
+      </form>
+    </div>
+  </div>
+  <script src="scprit.js"></script>
+</body>
+</html>
+
